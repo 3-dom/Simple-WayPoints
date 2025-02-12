@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "id": "simple-waypoints",
+  "version": "${version}",
+  "name": "Simple WayPoints",
+  "description": "",
+  "authors": [],
+  "contact": {},
+  "license": "unlicense",
+  "icon": "assets/simple-waypoints/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "main": [
+      {
+        "value": "net.threeDom.simpleWaypoints.SimpleWaypoints",
+        "adapter": "kotlin"
+      }
+    ],
+    "client": [
+      {
+        "value": "net.threeDom.simpleWaypoints.client.SimpleWaypointsClient",
+        "adapter": "kotlin"
+      }
+    ]
+  },
+  "mixins": [
+    "simple-waypoints.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric-language-kotlin": ">=${kotlin_loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
