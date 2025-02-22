@@ -52,16 +52,25 @@ object SimpleWaypointsClient : ClientModInitializer {
         ClientTickEvents.END_CLIENT_TICK.register { client ->
             val player = client.player ?: return@register
 
-            if (!isDead && player.health <= 0) {
-                isDead = true
-                wpm.addWaypoint("Death", listOf(player.x.toInt(), player.y.toInt(), player.z.toInt()))
-                wpm.setActiveWaypoint("Death")
-                return@register
+            if (player.health > 0) {
+                if(isDead) {
+                    isDead = false
+                }
+                return@register;
             }
 
-            if (isDead) {
-                isDead = false
+            if (!isDead) {
+                isDead = true
+
+                if (wpm.getWaypoints().containsKey("Death")) {
+                    wpm.updateWaypoint("Death", listOf(player.x.toInt(), player.y.toInt(), player.z.toInt()));
+                } else {
+                    wpm.addWaypoint("Death", listOf(player.x.toInt(), player.y.toInt(), player.z.toInt()))
+                }
+                wpm.setActiveWaypoint("Death")
             }
+
+            return@register
         }
     }
 }

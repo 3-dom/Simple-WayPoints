@@ -48,6 +48,8 @@ object WayPointCommand : Command() {
 				if (input.size < 2) {
 					return cu.printError("No key was provided")
 				}
+				wpm.getWaypoint(input[1]) ?: return cu.printError("Key was not found")
+
 				wpm.delWaypoint(input[1])
 				cu.printInfo("Deleted waypoint: " + input[1])
 			}
