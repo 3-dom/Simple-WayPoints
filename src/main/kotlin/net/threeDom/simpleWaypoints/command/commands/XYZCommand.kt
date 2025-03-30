@@ -3,11 +3,13 @@ package net.threeDom.simpleWaypoints.command.commands
 import net.threeDom.simpleWaypoints.client.SimpleWaypointsClient
 import net.threeDom.simpleWaypoints.command.Command
 
-object XYZCommand : Command() {
+object XYZCommand: Command()
+{
 	override val cmd: String = "xyz"
 	override val desc: String = "Sends a message including your current coOrds."
 
-	override fun process(input: List<String>) {
+	override fun process(input: List<String>)
+	{
 		val mc = SimpleWaypointsClient.mc;
 		val player = mc.player ?: return
 

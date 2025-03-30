@@ -6,31 +6,38 @@ import net.threeDom.simpleWaypoints.util.ChatUtil
 import net.threeDom.simpleWaypoints.waypoint.WayPoint
 import net.threeDom.simpleWaypoints.waypoint.WayPointManager
 
-object WayPointCommand : Command() {
+object WayPointCommand: Command()
+{
 	override val cmd: String = "wp"
 	override val desc: String = "Handles waypoints loaded into the client."
 	val args: List<String> = listOf("del", "get", "set", "find", "list")
 	val cu: ChatUtil = SimpleWaypointsClient.cu
 
-	override fun process(input: List<String>) {
+	override fun process(input: List<String>)
+	{
 
-		if (input.isEmpty()) {
+		if(input.isEmpty())
+		{
 			cu.printError("No arguments specified")
 			return
 		}
 
 		val base = input[0]
 
-		if (!args.contains(base)) {
+		if(! args.contains(base))
+		{
 			cu.printError("Invalid argument")
 			return
 		}
 
 		val wpm = SimpleWaypointsClient.wpm
 
-		when (base) {
-			"get" -> {
-				if (input.size < 2) {
+		when(base)
+		{
+			"get"  ->
+			{
+				if(input.size < 2)
+				{
 					cu.printError("No key was provided")
 					return
 				}
@@ -38,14 +45,18 @@ object WayPointCommand : Command() {
 				printWaypoint(wp)
 			}
 
-			"list" -> {
-				for (wp in wpm.getWaypoints()) {
+			"list" ->
+			{
+				for(wp in wpm.getWaypoints())
+				{
 					printWaypoint(wp.value)
 				}
 			}
 
-			"del" -> {
-				if (input.size < 2) {
+			"del"  ->
+			{
+				if(input.size < 2)
+				{
 					return cu.printError("No key was provided")
 				}
 				wpm.getWaypoint(input[1]) ?: return cu.printError("Key was not found")
@@ -54,16 +65,20 @@ object WayPointCommand : Command() {
 				cu.printInfo("Deleted waypoint: " + input[1])
 			}
 
-			"set" -> {
-				if (input.size < 2) {
+			"set"  ->
+			{
+				if(input.size < 2)
+				{
 					return cu.printError("No key was provided")
 				}
 
 				setWayPoint(wpm, input)
 			}
 
-			"find" -> {
-				if (input.size < 2) {
+			"find" ->
+			{
+				if(input.size < 2)
+				{
 					return cu.printError("No key was provided")
 				}
 
@@ -73,19 +88,23 @@ object WayPointCommand : Command() {
 		}
 	}
 
-	private fun printWaypoint(wp: WayPoint) {
+	private fun printWaypoint(wp: WayPoint)
+	{
 		val name = wp.name
 		val coOrds = wp.coOrds
 		cu.printInfo("$name is located at: $coOrds")
 	}
 
-	private fun setWayPoint(wpm: WayPointManager, args: List<String>) {
+	private fun setWayPoint(wpm: WayPointManager, args: List<String>)
+	{
 		val coOrds: List<Int> = getCoOrds(args)
-		if (coOrds.isEmpty()) {
+		if(coOrds.isEmpty())
+		{
 			return
 		}
 
-		if (wpm.getWaypoint(args[1]) == null) {
+		if(wpm.getWaypoint(args[1]) == null)
+		{
 			wpm.addWaypoint(args[1], listOf(coOrds[0], coOrds[1], coOrds[2]))
 			cu.printInfo("Created waypoint: " + args[1])
 			return
@@ -95,21 +114,25 @@ object WayPointCommand : Command() {
 		cu.printInfo("Updated waypoint: " + args[1])
 	}
 
-	private fun getCoOrds(args: List<String>): List<Int> {
+	private fun getCoOrds(args: List<String>): List<Int>
+	{
 		val player = SimpleWaypointsClient.mc.player ?: return listOf()
 
 		val x: Int
 		val y: Int
 		val z: Int
 
-		when (args.size) {
-			2 -> {
+		when(args.size)
+		{
+			2    ->
+			{
 				x = player.x.toInt()
 				y = player.y.toInt()
 				z = player.z.toInt()
 			}
 
-			5 -> {
+			5    ->
+			{
 				x = args[2].toInt()
 				y = args[3].toInt()
 				z = args[4].toInt()

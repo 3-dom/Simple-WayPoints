@@ -9,10 +9,12 @@ import net.threeDom.simpleWaypoints.util.MathUtil.q_rsqrt
 import net.threeDom.simpleWaypoints.waypoint.WayPoint
 import kotlin.math.abs
 
-object GuiUtil {
-	fun createGPS(tr: TextRenderer?, context: DrawContext, wp: WayPoint?, player: ClientPlayerEntity) {
-		if (wp == null) return
-		if (wp.coOrds.size != 3) return
+object GuiUtil
+{
+	fun createGPS(tr: TextRenderer?, context: DrawContext, wp: WayPoint?, player: ClientPlayerEntity)
+	{
+		if(wp == null) return
+		if(wp.coOrds.size != 3) return
 
 		val dX: Int = wp.coOrds[0]
 		val dY = wp.coOrds[1]
@@ -36,13 +38,14 @@ object GuiUtil {
 		context.drawText(tr, dest, 2, 12, 0xFFFFFF, true)
 		context.drawText(tr, offset, 2, 22, 0xFFFFFF, true)
 
-		if (dist > 0.15 && player.health > 0) {
+		if(dist > 0.15 && player.health > 0)
+		{
 			wpm.clearActiveWaypoint()
 		}
 	}
 
-	fun renderItemHealth(context: DrawContext, tr: TextRenderer, `is`: ItemStack) {
-		// Simple dmg calc, doesn't take enchantment into consideration yet.
+	fun renderItemHealth(context: DrawContext, tr: TextRenderer, `is`: ItemStack)
+	{		// Simple dmg calc, doesn't take enchantment into consideration yet.
 		val damage = `is`.maxDamage - `is`.damage
 		val damageString = damage.toString()
 

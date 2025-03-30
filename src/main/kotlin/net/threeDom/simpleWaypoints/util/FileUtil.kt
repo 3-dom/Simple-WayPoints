@@ -7,23 +7,29 @@ import java.nio.file.Path
 import kotlin.io.path.createDirectory
 import kotlin.io.path.exists
 
-object FileUtil {
+object FileUtil
+{
 
-	fun readMapFromFile(fileName: String, path: String = ""): MutableMap<String, String> {
+	fun readMapFromFile(fileName: String, path: String = ""): MutableMap<String, String>
+	{
 		val filePath: String = getPath(fileName, path) + ".txt"
 		val reader: FileReader
-		try {
+		try
+		{
 			reader = FileReader(filePath)
-		} catch (e: FileNotFoundException) {
+		} catch(e: FileNotFoundException)
+		{
 			return mutableMapOf()
 		}
 
 		val map: MutableMap<String, String> = mutableMapOf()
 
-		for (line in reader.readLines()) {
+		for(line in reader.readLines())
+		{
 			val kv: List<String> = line.split(":")
 
-			if (kv.size != 2) {
+			if(kv.size != 2)
+			{
 				continue
 			}
 
@@ -33,11 +39,13 @@ object FileUtil {
 		return map
 	}
 
-	fun writeFileFromMap(map: MutableMap<String, String>, fileName: String, path: String = "") {
+	fun writeFileFromMap(map: MutableMap<String, String>, fileName: String, path: String = "")
+	{
 		val filePath: String = getPath(fileName, path) + ".txt"
 		val p: Path = Path.of(path)
 
-		if (!p.exists()) {
+		if(! p.exists())
+		{
 			p.createDirectory()
 		}
 
@@ -51,7 +59,8 @@ object FileUtil {
 		writer.close()
 	}
 
-	private fun getPath(fileName: String, path: String): String {
-		return (if (path == "") fileName else "$path/$fileName")
+	private fun getPath(fileName: String, path: String): String
+	{
+		return (if(path == "") fileName else "$path/$fileName")
 	}
 }

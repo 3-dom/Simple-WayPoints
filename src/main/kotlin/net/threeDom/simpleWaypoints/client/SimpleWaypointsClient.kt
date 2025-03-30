@@ -12,65 +12,78 @@ import net.threeDom.simpleWaypoints.util.ChatUtil
 import net.threeDom.simpleWaypoints.util.GuiUtil
 import net.threeDom.simpleWaypoints.waypoint.WayPointManager
 
-object SimpleWaypointsClient : ClientModInitializer {
-    val mc: MinecraftClient = MinecraftClient.getInstance()
-    var wpm: WayPointManager = WayPointManager
-    val cu: ChatUtil = ChatUtil
+object SimpleWaypointsClient: ClientModInitializer
+{
+	val mc: MinecraftClient = MinecraftClient.getInstance()
+	var wpm: WayPointManager = WayPointManager
+	val cu: ChatUtil = ChatUtil
 
-    private val cm: CommandManager = CommandManager
-    private val gu: GuiUtil = GuiUtil
+	private val cm: CommandManager = CommandManager
+	private val gu: GuiUtil = GuiUtil
 
-    override fun onInitializeClient() {
-        wpm.loadMapFile()
-        var isDead = false
+	override fun onInitializeClient()
+	{
+		wpm.loadMapFile()
+		var isDead = false
 
-        HudRenderCallback.EVENT.register { drawContext, _ ->
-            val wp = wpm.getActiveWaypoint()
-            val tr: TextRenderer = mc.textRenderer
+		HudRenderCallback.EVENT.register { drawContext, _ ->
+			val wp = wpm.getActiveWaypoint()
+			val tr: TextRenderer = mc.textRenderer
 
-            // Ensure the player exists (this should never fail)
-            val player = mc.player ?: return@register
+			// Ensure the player exists (this should never fail)
+			val player = mc.player ?: return@register
 
-            if (wp != null) {
-                gu.createGPS(tr, drawContext, wp, player)
-            }
+			if(wp != null)
+			{
+				gu.createGPS(tr, drawContext, wp, player)
+			}
 
-            val stack: ItemStack = player.mainHandStack
-            if (stack.isDamageable) {
-                gu.renderItemHealth(drawContext, tr, stack)
-            }
-        }
+			val stack: ItemStack = player.mainHandStack
+			if(stack.isDamageable)
+			{
+				gu.renderItemHealth(drawContext, tr, stack)
+			}
+		}
 
-        ClientSendMessageEvents.ALLOW_CHAT.register { message ->
-            if (message.startsWith(".")) {
-                cm.runCmd(message)
-                return@register false
-            }
-            return@register true
-        }
+		ClientSendMessageEvents.ALLOW_CHAT.register { message ->
+			if(message.startsWith("."))
+			{
+				cm.runCmd(message)
+				return@register false
+			}
+			return@register true
+		}
 
-        ClientTickEvents.END_CLIENT_TICK.register { client ->
-            val player = client.player ?: return@register
+		ClientTickEvents.END_CLIENT_TICK.register { client ->
+			val player = client.player ?: return@register
 
-            if (player.health > 0) {
-                if(isDead) {
-                    isDead = false
-                }
-                return@register;
-            }
+			if(player.health > 0)
+			{
+				if(isDead)
+				{
+					isDead = false
+				}
+				return@register;
+			}
 
-            if (!isDead) {
-                isDead = true
+			if(! isDead)
+			{
+				isDead = true
 
-                if (wpm.getWaypoints().containsKey("Death")) {
-                    wpm.updateWaypoint("Death", listOf(player.x.toInt(), player.y.toInt(), player.z.toInt()));
-                } else {
-                    wpm.addWaypoint("Death", listOf(player.x.toInt(), player.y.toInt(), player.z.toInt()))
-                }
-                wpm.setActiveWaypoint("Death")
-            }
+				if(wpm
+						.getWaypoints()
+						.containsKey("Death"))
+				{
+					wpm.updateWaypoint("Death", listOf(player.x.toInt(), player.y.toInt(), player.z.toInt()));
+				}
+				else
+				{
+					wpm.addWaypoint("Death", listOf(player.x.toInt(), player.y.toInt(), player.z.toInt()))
+				}
+				wpm.setActiveWaypoint("Death")
+			}
 
-            return@register
-        }
-    }
+			return@register
+		}
+	}
 }

@@ -1,7 +1,9 @@
 package net.threeDom.simpleWaypoints.util
 
-object MathUtil {
-	fun q_rsqrt(num: Float): Float {
+object MathUtil
+{
+	fun q_rsqrt(num: Float): Float
+	{
 		var i: Int
 		val x2 = num * 0.5f
 		var y = num

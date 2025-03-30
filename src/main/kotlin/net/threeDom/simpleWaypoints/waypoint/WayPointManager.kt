@@ -2,40 +2,49 @@ package net.threeDom.simpleWaypoints.waypoint
 
 import net.threeDom.simpleWaypoints.util.FileUtil
 
-object WayPointManager {
+object WayPointManager
+{
 	private val fileUtil: FileUtil = FileUtil
 	private var waypoints: MutableMap<String, WayPoint> = mutableMapOf()
 	private var activeWaypoint: WayPoint? = null
 
 
-	fun clearWaypoints() {
+	fun clearWaypoints()
+	{
 		waypoints = mutableMapOf()
 	}
 
-	fun clearActiveWaypoint() {
+	fun clearActiveWaypoint()
+	{
 		activeWaypoint = null
 	}
 
-	fun setActiveWaypoint(key: String) {
+	fun setActiveWaypoint(key: String)
+	{
 		activeWaypoint = getWaypoint(key)
 	}
 
-	fun getActiveWaypoint(): WayPoint? {
+	fun getActiveWaypoint(): WayPoint?
+	{
 		return activeWaypoint
 	}
 
-	fun getWaypoints(): MutableMap<String, WayPoint> {
+	fun getWaypoints(): MutableMap<String, WayPoint>
+	{
 		return waypoints
 	}
 
-	fun getWaypoint(key: String): WayPoint? {
+	fun getWaypoint(key: String): WayPoint?
+	{
 		val wp = waypoints[key] ?: return null
 
 		return wp
 	}
 
-	fun addWaypoint(key: String, coOrds: List<Int>) {
-		if (waypoints.containsKey(key)) {
+	fun addWaypoint(key: String, coOrds: List<Int>)
+	{
+		if(waypoints.containsKey(key))
+		{
 			return
 		}
 
@@ -44,26 +53,31 @@ object WayPointManager {
 		updateMapFile()
 	}
 
-	fun delWaypoint(key: String) {
-		if (!waypoints.containsKey(key)) {
+	fun delWaypoint(key: String)
+	{
+		if(! waypoints.containsKey(key))
+		{
 			return
 		}
 
 		waypoints.remove(key)
 
-		if (getActiveWaypoint()?.name == key) {
+		if(getActiveWaypoint()?.name == key)
+		{
 			clearActiveWaypoint()
 		}
 
 		updateMapFile()
 	}
 
-	fun updateWaypoint(key: String, coOrds: List<Int>) {
+	fun updateWaypoint(key: String, coOrds: List<Int>)
+	{
 		waypoints[key] = WayPoint(key, coOrds)
 		updateMapFile()
 	}
 
-	private fun updateMapFile() {
+	private fun updateMapFile()
+	{
 		val nMap: MutableMap<String, String> = mutableMapOf()
 
 		waypoints.keys.forEach { key ->
@@ -74,7 +88,8 @@ object WayPointManager {
 		fileUtil.writeFileFromMap(nMap, "waypoints", "mods/SimpleWayPoints")
 	}
 
-	fun loadMapFile() {
+	fun loadMapFile()
+	{
 		val tMap: MutableMap<String, String>
 		val nMap: MutableMap<String, WayPoint> = mutableMapOf()
 
@@ -82,9 +97,11 @@ object WayPointManager {
 
 		tMap.keys.forEach { key ->
 			val value = tMap[key] ?: return
-			val valSplit = value.trim().split(",")
+			val valSplit = value
+				.trim()
+				.split(",")
 
-			if (valSplit.size != 3) return
+			if(valSplit.size != 3) return
 
 			nMap[key] = WayPoint(key, listOf(valSplit[0].toInt(), valSplit[1].toInt(), valSplit[2].toInt()))
 		}
